@@ -16,8 +16,8 @@ unsigned int nextTime = 0;
 HttpClient http;
 
 http_header_t headers[] = {
-    { "Accept" , "*/*"},
-    { NULL, NULL }
+  { "Accept" , "*/*"},
+  { NULL, NULL }
 };
 
 http_request_t request;
@@ -30,61 +30,61 @@ int switchPin = D1;
 #endif
 
 void setup()   {
-    Serial.begin(9600);
-    display.begin(SSD1306_SWITCHCAPVCC);
-    pinMode(switchPin, INPUT_PULLUP);
+  Serial.begin(9600);
+  display.begin(SSD1306_SWITCHCAPVCC);
+  pinMode(switchPin, INPUT_PULLUP);
 
-    Time.zone(+1); //set timezone for bst
+  Time.zone(+1); //set timezone for bst
 
-    display.display(); // show splashscreen
-    delay(2000);
-    display.clearDisplay();   // clears the screen and buffer
+  display.display(); // show splashscreen
+  delay(2000);
+  display.clearDisplay();   // clears the screen and buffer
 
-    getTrainTime(); //display nextTrainTime on startup to make sure its working correctly, then clear the display
+  getTrainTime(); //display nextTrainTime on startup to make sure its working correctly, then clear the display
 }
 
 
 void loop() {
-    if(Time.weekday() >= 2 && Time.weekday() <= 6) { //check to make sure it is a weekday
-        if(Time.hour() == 8) { // check if the hour is 8:XX AM
-            if (nextTime > millis()) {
-                return;
-            } else {
-                getTrainTime();
-                nextTime = millis() + 180000;
-            }
-        }
-    }
-
-    if(digitalRead(switchPin) == LOW) {
+  if(Time.weekday() >= 2 && Time.weekday() <= 6) { //check to make sure it is a weekday
+    if(Time.hour() == 8) { // check if the hour is 8:XX AM
+      if (nextTime > millis()) {
+        return;
+      } else {
         getTrainTime();
+        nextTime = millis() + 180000;
+      }
     }
+  }
+
+  if(digitalRead(switchPin) == LOW) {
+    getTrainTime();
+  }
 }
 
 void getTrainTime() {
-    // GET request
-    request.hostname = "floating-ravine-80137.herokuapp.com";
-    request.port = 80;
-    request.path = "/Sandymount/Northbound/30";
-    http.get(request, response, headers);
+  // GET request
+  request.hostname = "floating-ravine-80137.herokuapp.com";
+  request.port = 80;
+  request.path = "/Sandymount/Northbound/30";
+  http.get(request, response, headers);
 
-    // Response Status
-    // Serial.print("Application>\tResponse status: ");
-    // Serial.println(response.status);`
+  // Response Status
+  // Serial.print("Application>\tResponse status: ");
+  // Serial.println(response.status);`
 
-    // Response Body
-    // Serial.print("Application>\tHTTP Response Body: ");
-    // Serial.println(response.body);
+  // Response Body
+  // Serial.print("Application>\tHTTP Response Body: ");
+  // Serial.println(response.body);
 
-    //Print result on the OLED screen
-    printText(response.body);
+  //Print result on the OLED screen
+  printText(response.body);
 }
 
 void printText(String text) {
-    display.clearDisplay();
-    display.setCursor(0,0);
-    display.setTextColor(WHITE);
-    display.setTextSize(1);
-    display.println(text);
-    display.display();
+  display.clearDisplay();
+  display.setCursor(0,0);
+  display.setTextColor(WHITE);
+  display.setTextSize(1);
+  display.println(text);
+  display.display();
 }

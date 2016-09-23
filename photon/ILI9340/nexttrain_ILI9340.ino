@@ -7,8 +7,8 @@ unsigned int nextTime = 0;
 HttpClient http;
 
 http_header_t headers[] = {
-    { "Accept" , "*/*"},
-    { NULL, NULL }
+  { "Accept" , "*/*"},
+  { NULL, NULL }
 };
 
 http_request_t request;
@@ -16,36 +16,35 @@ http_response_t response;
 
 int switchPin = D1;
 
-Adafruit_ILI9340 display = Adafruit_ILI9340(A2, A1, A0);
+Adafruit_ILI9340 display = Adafruit_ILI9340(A0, A2, A1);
 
 void setup() {
-	Serial.begin(9600);
-	display.begin();
-	pinMode(switchPin, INPUT_PULLUP);
+  Serial.begin(9600);
+  display.begin();
+  pinMode(switchPin, INPUT_PULLUP);
 
   Time.zone(+1); //set timezone for bst
+  display.setRotation(3); // rotate screen for landscape orientation
+  display.fillScreen(ILI9340_YELLOW); // flash screen yellow to ensure screen is working
 
-	display.setRotation(1); // rotate screen for landscape orientation
-	display.fillScreen(ILI9340_YELLOW); // flash screen yellow to ensure screen is working
-
-	getTrainTime(); //display nextTrainTime on startup to make sure its working correctly, then clear the display
+  getTrainTime(); //display nextTrainTime on startup to make sure its working correctly, then clear the display
 }
 
 void loop() {
-	if(Time.weekday() >= 2 && Time.weekday() <= 6) { //check to make sure it is a weekday
-			if(Time.hour() == 8) { // check if the hour is 8:XX AM
-					if (nextTime > millis()) {
-							return;
-					} else {
-							getTrainTime();
-							nextTime = millis() + 180000;
-					}
-			}
-	}
+  if(Time.weekday() >= 2 && Time.weekday() <= 6) { //check to make sure it is a weekday
+    if(Time.hour() == 8) { // check if the hour is 8:XX AM
+      if (nextTime > millis()) {
+        return;
+      } else {
+        getTrainTime();
+        nextTime = millis() + 180000;
+       }
+     }
+   }
 
-	if(digitalRead(switchPin) == LOW) {
-			getTrainTime();
-	}
+  if(digitalRead(switchPin) == LOW) {
+     getTrainTime();
+   }
 }
 
 void getTrainTime() {
@@ -69,8 +68,8 @@ void getTrainTime() {
 
 void printText(String text) {
     display.fillScreen(ILI9340_BLACK);
-		display.setCursor(0, 0);
-		display.setTextColor(ILI9340_WHITE);
-		display.setTextSize(3);
+    display.setCursor(0, 0);
+    display.setTextColor(ILI9340_WHITE);
+    display.setTextSize(3);
     display.println(text);
 }
