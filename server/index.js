@@ -47,7 +47,7 @@ var getTrainTime = function(station, direction, time, callback) {
 
 function getCurrentTime() {
   var date = new Date();
-  return time = ('0' + (date.getHours() + 1)).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
+  return time = ('0' + (date.getHours())).slice(-2) + ':' + ('0' + date.getMinutes()).slice(-2) + ':' + ('0' + date.getSeconds()).slice(-2);
 }
 
 app.listen(port, function () {
