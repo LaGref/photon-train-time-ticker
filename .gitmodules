@@ -1,0 +1,3 @@
+[submodule "photon-train-time-ticker-server"]
+	path = photon-train-time-ticker-server
+	url = https://github.com/LaGref/photon-train-time-ticker-server.git
